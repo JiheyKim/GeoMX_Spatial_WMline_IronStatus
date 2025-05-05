@@ -1,8 +1,9 @@
 # Spatial Transcriptomics of Chronic-Active Lesions in Multiple Sclerosis
 
-A tissue block containing two closely apposed cerebral WM lesions was excised from a cm-thick frozen hemispheric brain slice from a 65-year-old progressive MS patient with a 16-year disease duration and an EDSS score of 8.5. The block was sectioned in a cryostat at a thickness of 10 ums and characterized by staining for myelin (PLP antibodies) and microglia/macrophages (MHC Class II antibodies).Sections were also stained for iron using the Turnball method.
+This project investigates the molecular mechanisms underlying chronic active white matter lesions in multiple sclerosis (MS), with a focus on the role of iron-positive and iron-negative microglia/macrophages. MS is a chronic demyelinating disease of the central nervous system characterized by a transition from a relapsing-remitting phase to a progressive stage, where current therapies are largely ineffective.
 
-MHC Class II antibodies were tagged with xxx and applied to four adjacent 10 um-thick sections and collected in a GeoMX Digital Spatial Profiler. Collection and processing of MHC Class II-positive cells were performed as described in the GeoMX DSP Manual Slide Preparation User Manual. At least 5 ROIs (do we have an average area for ROIs) were drawn at the core and rim of both lesions and adjacent myelinated WM in the four sections (Fig 1).
+Using spatial transcriptomics on postmortem MS brain tissue, we analyzed transcript profiles from iron-positive and iron-negative lesion rims, lesion cores, and surrounding normal white matter. Our approach revealed distinct transcriptional signatures associated with immune activation, IL-12 signaling, and cellular stress responses, depending on both the iron status and lesion region.
 
+This repository contains data and analysis code supporting the reproducibility and spatial resolution of transcriptomic differences in MS lesions, aiming to provide insights into the localized inflammatory environments that drive lesion expansion and disease progression.
 
 
