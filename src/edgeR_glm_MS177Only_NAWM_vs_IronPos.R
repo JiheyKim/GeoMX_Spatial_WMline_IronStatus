@@ -1,13 +1,33 @@
+## mamba activate R4.4
+
 library(edgeR)
 library(dplyr)
 library(ComplexHeatmap)
+
+f <- "RawCounts_MS177-6-5Only_4slidesOnly_ROIbyGene_CORRECTED_AnnotAdded.txt"
+
+# Read data and preprocess
+lines <- readLines(f, n = 3)
+g <- strsplit(gsub(" ", "_", lines[1]), "\t")[[1]][-1]
+pa <- strsplit(gsub(" ", "_", lines[2]), "\t")[[1]][-1]
+
+tt <- read.table(f, header = TRUE, skip = 2)
+colnames(tt) <- gsub(" ", "_", colnames(tt))
+rownames(tt) <- tt$gene
+
+# Aggregate duplicate gene entries by mean
+x <- aggregate(. ~ gene, data = tt, FUN = mean)
+rownames(x) <- x$gene
+x <- x[, -1]
+
+# Convert group labels to factor
+g <- as.factor(g)
 
 # Prepare the DGEList and filter
 y = DGEList(counts=x, group=g)
 keep = filterByExpr(y, group=g)
 y = normLibSizes(y)
 m = cpm(y, normalized.lib.sizes=TRUE)
-
 # Contrast for gWM_line_Lesion_1 vs. gWM_line_Lesion_2
 contrast <- makeContrasts(gWM_line_Lesion_1 - gNAWM, levels = design)
 lrt <- glmLRT(fit, contrast = contrast)
