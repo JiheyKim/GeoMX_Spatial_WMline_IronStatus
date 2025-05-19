@@ -64,14 +64,14 @@ get_significant_genes <- function(contrast_name) {
 comparisons <- list(
   "gWM_line_Lesion_1 - gWM_line_Lesion_2",
   "gNAWM - gWM_line_Lesion_1",
-  "gNAWM - gWM_line_Lesion_2"
-#  "gWML_Lesion_1 - gWML_Lesion_2",
-#  "gNAWM - gWML_Lesion_1",
-#  "gNAWM - gWML_Lesion_2",
-#  "gWM_line_Lesion_1 - gWML_Lesion_1",
-#  "gWM_line_Lesion_1 - gWML_Lesion_2",
-#  "gWM_line_Lesion_2 - gWML_Lesion_1",
-#  "gWM_line_Lesion_2 - gWML_Lesion_2"
+  "gNAWM - gWM_line_Lesion_2",
+  "gWML_Lesion_1 - gWML_Lesion_2",
+  "gNAWM - gWML_Lesion_1",
+  "gNAWM - gWML_Lesion_2",
+  "gWM_line_Lesion_1 - gWML_Lesion_1",
+  "gWM_line_Lesion_1 - gWML_Lesion_2",
+  "gWM_line_Lesion_2 - gWML_Lesion_1",
+  "gWM_line_Lesion_2 - gWML_Lesion_2"
 )
 
 # Perform all pairwise comparisons
@@ -91,7 +91,7 @@ print(combined_results)
  
  
 # Output combined results
-write.table(as.matrix(combined_results), file = "NAWMnLine_pairwise_comparisons_results_allGenes.txt", sep = "\t", quote = FALSE, row.names = TRUE)
+#write.table(as.matrix(combined_results), file = "NAWMnLine_pairwise_comparisons_results_allGenes.txt", sep = "\t", quote = FALSE, row.names = TRUE)
 # Optional: Generate correlation heatmap of group averages
 # Compute group means
 group_means <- t(sapply(levels(g), function(group) {
@@ -120,7 +120,44 @@ pheatmap(group_correlations,
          na_col = "grey",  # Set the color for NA values to grey
          breaks = seq(0, 1, length.out = 101),  # Scale from 0 to 1
          main = "Correlation Heatmap of Groups")
- 
+
+
+
+
+#######################################
+#### 
+####        USE THIS !!!!  Log2-Transformed Group Means Correlation Heatmap
+####
+#######################################
+
+# Load required library
+library(pheatmap)
+
+# Step 1: Compute log2-transformed CPM values
+log_cpm <- cpm(y, log = TRUE)  # y should be TMM-normalized using calcNormFactors(y)
+
+# Step 2: Compute log2-transformed group means
+group_means_log <- t(sapply(levels(g), function(group) {
+  group_samples <- which(g == group)
+  rowMeans(log_cpm[, group_samples])
+}))
+group_means_log <- t(group_means_log)  # Transpose so rows are genes, columns are groups
+colnames(group_means_log) <- levels(g)
+
+# Step 3: Compute correlation matrix
+group_correlations_log <- cor(group_means_log)
+
+# Step 4: Plot heatmap
+pheatmap(group_correlations_log,
+         clustering_distance_rows = "correlation",
+         clustering_distance_cols = "correlation",
+         clustering_method = "complete",
+         color = colorRampPalette(c("white", "yellow", "red"))(100),  # Gradient from low to high
+         na_col = "grey",         # Set NA values (if any) to grey
+         breaks = seq(0, 1, length.out = 101),  # For correlation values 0–1
+         main = "Correlation Heatmap of Group Means")
+
+
  
  ########### PCA Plot ###########
  
@@ -453,63 +490,3 @@ write.csv(all_degs, "DEGs_with_FDR_FC_Categories.csv", row.names = FALSE)
 
 
 
- 
-################
-# Generate the heatmap after checking and cleaning the expression data
-y = DGEList(counts=x, group=g)
-keep = filterByExpr(y, group=g)
-y = normLibSizes(y)
-m = cpm(y, normalized.lib.sizes=TRUE)
-
-# Contrast for gWM_line_Lesion_1 vs. gWM_line_Lesion_2
-contrast <- makeContrasts(gWM_line_Lesion_1 - gWM_line_Lesion_2, levels = design)
-lrt <- glmLRT(fit, contrast = contrast)
-
-# Extract significant genes
-significant_genes <- topTags(lrt, adjust.method = "fdr", n = Inf)$table %>%
-  as.data.frame() %>%
-#  filter(FDR < 0.05 & abs(logFC) >= log(1.5))
-   filter(FDR < 0.05)
-
-# Get the gene names of significantly differentially expressed genes
-significant_gene_names <- row.names(significant_genes)
-
-# Extract the expression data for the significant genes
-significant_expr_data <- m[significant_gene_names, ]
-
-# If needed, subset the data to include only samples from the two groups of interest
-group_samples <- which(g %in% c("WM_line_Lesion_1", "WM_line_Lesion_2"))
-expr_data_subset <- significant_expr_data[, group_samples]
-
-# Ensure that column names of expr_data_subset match the group names
-colnames(expr_data_subset) <- g[group_samples]
-
-# Check for NA, NaN, or Inf values and handle them
-expr_data_subset[is.na(expr_data_subset)] <- 0
-expr_data_subset[is.nan(expr_data_subset)] <- 0
-expr_data_subset[is.infinite(expr_data_subset)] <- 0
-
-# Generate the heatmap
-output_file <- "WMline_IronPos_vs_WMline_IronNeg_FDR005.jpg"
-
-# Create a JPG file to save the heatmap
-jpeg(output_file, width = 800, height = 600)  # Adjust width and height as needed
-
-# Generate the heatmap
-Heatmap(t(scale(t(log(expr_data_subset + 10)))), 
-        column_split = colnames(expr_data_subset), 
-        show_row_names = FALSE, 
-        show_column_names = TRUE)
-
-# Turn off the device
-dev.off()
-_____________________________________
-Jihye Kim, PhD.
-Project Staff
-Department of Quantitative Health Sciences 
-Lerner Research Institute, Cleveland Clinic 
-9500 Euclid Avenue, NC3-116
-Cleveland Clinic, Cleveland, Ohio, 44195
-Email : Kimj23@ccf.org
- 
- 
