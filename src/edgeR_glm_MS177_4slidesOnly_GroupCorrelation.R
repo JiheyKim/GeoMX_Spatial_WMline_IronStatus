@@ -1,43 +1,49 @@
-## mamba activate R4.4 (R4.3)
+## Activate conda environment externally if needed (not in R script)
+## mamba activate R4.4 (R version 4.3)
 
-## WM_line_Lesion_1 : Iron Positive
-## WM_line_Lesion_2 : Iron Negative
+# Description:
+# WM_line_Lesion_1 : Iron Positive
+# WM_line_Lesion_2 : Iron Negative
 
-#f <- "RawCounts_MS177-6-5Only_ROIbyGene_AnnotAdded.txt"
-f <- "RawCounts_MS177-6-5_4slides_ROIbyGene_AnnotAdded.txt"
-#f <- "RawCounts_MS177-6-5_4slides_ROIbyGene_AnnotAdded.txt"
-tt=read.table(f,header=T,skip=2); colnames(tt)=gsub(" ","_",colnames(tt)); row.names(tt)=tt$gene;
+# Input file (final corrected 4-slide version)
+f <- "RawCounts_MS177-6-5Only_4slidesOnly_ROIbyGene_CORRECTED_AnnotAdded.txt"
+
+# Read data and preprocess
 lines <- readLines(f, n = 3)
-g=strsplit(gsub(" ","_",lines[1]),"\t")[[1]]; g=g[2:length(g)]
-pa=strsplit(gsub(" ","_",lines[2]),"\t")[[1]]; pa=pa[2:length(pa)]
-gene <- tt$gene;
-x=aggregate(. ~ gene, data = tt, FUN = mean); row.names(x)=x$gene; x=x[,-1];
+g <- strsplit(gsub(" ", "_", lines[1]), "\t")[[1]][-1]
+pa <- strsplit(gsub(" ", "_", lines[2]), "\t")[[1]][-1]
 
+tt <- read.table(f, header = TRUE, skip = 2)
+colnames(tt) <- gsub(" ", "_", colnames(tt))
+rownames(tt) <- tt$gene
+
+# Aggregate duplicate gene entries by mean
+x <- aggregate(. ~ gene, data = tt, FUN = mean)
+rownames(x) <- x$gene
+x <- x[, -1]
+
+# Convert group labels to factor
+g <- as.factor(g)
+
+# Load libraries
 library(edgeR)
 library(limma)
-g=as.factor(g);
-y = DGEList(counts=x,group=g)
-keep = filterByExpr(y, group=g)
-y = normLibSizes(y)
-# Load necessary libraries
-library(edgeR)
-library(dplyr)  # or you can use library(magrittr)
+library(dplyr)
 
-# Now the rest of your code should work as expected with %>%
-g=as.factor(g);
-# Create DGEList object
+# Create DGEList and process
 y <- DGEList(counts = as.matrix(x), group = g)
 
 # Filter lowly expressed genes
 keep <- filterByExpr(y, group = g)
-y <- y[keep, , keep.lib.sizes=FALSE]
+y <- y[keep, , keep.lib.sizes = FALSE]
 
-# Normalize the library sizes
+# Normalize
 y <- calcNormFactors(y)
 
-# Design matrix based on group
+# Design matrix for downstream modeling
 design <- model.matrix(~0 + g)
 
+# Estimate dispersions
 y <- estimateDisp(y, design)
 
 # Now fit the model
