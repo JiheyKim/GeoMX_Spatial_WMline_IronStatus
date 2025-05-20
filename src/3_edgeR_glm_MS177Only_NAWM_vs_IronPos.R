@@ -106,7 +106,7 @@ output_file <- "WMline_NAWM_vs_WMline_IronPos_FDR005_wGeneName_CORRECTED.jpg"
 jpeg(output_file, width = 800, height = 600)  # Adjust width and height as needed
 
 # Generate the heatmap with split by groups
-Heatmap(t(scale(t(log(expr_data_subset + 1))))[, ncol(expr_data_subset):1], 
+Heatmap(t(scale(t(log(expr_data_subset + 1)))), 
         column_split = g[group_samples],  # Split by group
         show_row_names = TRUE, 
         show_column_names = TRUE,
