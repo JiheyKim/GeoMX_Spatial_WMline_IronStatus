@@ -5,7 +5,7 @@ library(magrittr)
 # Read the data
 #f <- "RawCounts_LineSamplesOnly_RegionROI2byGene_PatientAdded.txt"
 #f <- "RawCounts_MS177-6-5_4slides_ROIbyGene_AnnotAdded_sorted_SubRegionAdded.txt"
-f <- "RawCounts_MS177-6-5_4slides_ROIbyGene_AnnotAdded_sorted_SubRegionAdded_4Heatmap.txt"
+f <- "RawCounts_MS177-6-5Only_4slidesOnly_ROIbyGene_CORRECTED_AnnotAdded_4heatmap.txt"
 tt = read.table(f, header=T, skip=3)
 colnames(tt) = gsub(" ", "_", colnames(tt))
 row.names(tt) = tt$gene
