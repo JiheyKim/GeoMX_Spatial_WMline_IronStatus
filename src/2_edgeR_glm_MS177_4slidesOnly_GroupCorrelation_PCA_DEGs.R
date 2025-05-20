@@ -83,7 +83,27 @@ combined_results <- do.call(rbind, lapply(seq_along(results), function(i) {
 
 # View the combined results
 print(combined_results)
+
+write.csv(combined_results, file = "Combined_DE_Results.csv", row.names = FALSE)
+
+#### All gene's results.
+
  
+get_all_genes <- function(contrast_name) {
+  contrast <- makeContrasts(contrasts = contrast_name, levels = design)
+  qlf <- glmQLFTest(fit, contrast = contrast)
+  topTags(qlf, adjust.method = "fdr", n = Inf)$table %>%
+    as.data.frame() %>%
+    mutate(gene = rownames(.), comparison = contrast_name)
+}
+# Get full differential expression results for all comparisons
+all_results <- lapply(comparisons, get_all_genes)
+
+# Combine into a single data frame
+combined_all_results <- do.call(rbind, all_results)
+row.names(combined_all_results) <- NULL
+write.csv(combined_all_results, file = "All_DE_Results.csv", row.names = FALSE)
+
  
 
 
@@ -125,7 +145,7 @@ pheatmap(group_correlations_log,
  ########### PCA Plot ###########
  
  # Perform PCA on normalized expression values (CPM for each sample)
-y <- calcNormFactors(y)  # Ensure normalization factors are applied
+#y <- calcNormFactors(y)  # Ensure normalization factors are applied
 cpm_data <- cpm(y, log = TRUE)  # Use log-transformed CPM values for PCA
 
 # Perform PCA on the normalized CPM values for each sample
@@ -190,7 +210,13 @@ library(ggplot2)
 
 # Define color mapping
 #group_colors <- c("NAWM" = "green", "WM_line_Lesion_1" = "blue", "WM_line_Lesion_2" = "red")
-group_colors <- c("NAWM" = "#1B9E77", "WM_line_Lesion_1" = "#377EB8", "WM_line_Lesion_2" = "#E41A1C")
+group_colors <- c(
+  "NAWM" = "#1B9E77", 
+  "WM_line_Lesion_1" = "#377EB8", 
+  "WM_line_Lesion_2" = "#E41A1C",
+  "WML_Lesion_1" = "#984EA3", 
+  "WML_Lesion_2" = "#FF7F00"
+)
 
 # Plot PCA using ggplot2 with manually assigned colors
 ggplot(pca_data_selected, aes(x = PC1, y = PC2, color = Group, label = Sample)) +
@@ -252,8 +278,13 @@ pca_data_selected <- data.frame(
 )
 
 # Define color mapping
-#group_colors <- c("NAWM" = "green", "WM_line_Lesion_1" = "blue", "WM_line_Lesion_2" = "red")
-group_colors <- c("NAWM" = "#1B9E77", "WML_Lesion_1" = "#377EB8", "WML_Lesion_2" = "#E41A1C")
+group_colors <- c(
+  "NAWM" = "#1B9E77", 
+  "WM_line_Lesion_1" = "#377EB8", 
+  "WM_line_Lesion_2" = "#E41A1C",
+  "WML_Lesion_1" = "#984EA3", 
+  "WML_Lesion_2" = "#FF7F00"
+)
 
 # Plot PCA using ggplot2 with manually assigned colors
 ggplot(pca_data_selected, aes(x = PC1, y = PC2, color = Group, label = Sample)) +
@@ -276,8 +307,8 @@ ggplot(pca_data_selected, aes(x = PC1, y = PC2, color = Group, label = Sample)) 
 library(pheatmap)
 library(dplyr)
 
-y <- calcNormFactors(y)  # Ensure normalization factors are applied
-cpm_data <- cpm(y, log = TRUE)  # Use log-transformed CPM values for PCA
+#y <- calcNormFactors(y)  # Ensure normalization factors are applied
+#cpm_data <- cpm(y, log = TRUE)  # Use log-transformed CPM values for PCA
 
 # Extract DEGs and add gene names as a column
 degs_nawm_wm1 <- get_significant_genes("NAWM - WM_line_Lesion_1") %>%
@@ -352,7 +383,7 @@ pheatmap(heatmap_data_scaled,
                       nrow(heatmap_data_common_scaled) + nrow(heatmap_data_nawm_wm1_scaled)),  # Row splits
          gaps_col = c(sum(g[selected_samples][ordered_samples] == "NAWM"), 
                       sum(g[selected_samples][ordered_samples] %in% c("NAWM", "WM_line_Lesion_1"))),  # Column splits
-         scale = "row",
+         scale = "none",
          show_rownames = TRUE,
          show_colnames = TRUE,
          color = colorRampPalette(c("blue", "white", "red"))(100))
@@ -375,6 +406,21 @@ unique_nawm_wm1_data <- degs_nawm_wm1 %>%
 
 unique_nawm_wm2_data <- degs_nawm_wm2 %>%
   filter(gene %in% unique_nawm_wm2)
+
+
+####  still working on
+common1 <- degs_nawm_wm1 %>% filter(gene %in% common_degs) %>%
+  rename(FDR_1 = FDR, logFC_1 = logFC)
+
+common2 <- degs_nawm_wm2 %>% filter(gene %in% common_degs) %>%
+  rename(FDR_2 = FDR, logFC_2 = logFC)
+
+# Merge both sets of results by gene
+common_degs_data <- inner_join(common1, common2, by = "gene") %>%
+  mutate(Category = "Common DEGs")
+
+
+##############
 
 # Combine all categories
 all_degs <- bind_rows(common_degs_data, unique_nawm_wm1_data, unique_nawm_wm2_data)
