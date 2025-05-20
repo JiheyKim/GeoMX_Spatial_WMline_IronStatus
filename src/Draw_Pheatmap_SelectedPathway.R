@@ -5,7 +5,7 @@ library(dplyr)
 library(edgeR)
 
 # Step 1: Read your expression matrix (assuming tab-separated values)
-expr <- read.delim("RawCounts_MS177-6-5_4slides_ROIbyGene_AnnotAdded.txt", header = FALSE, stringsAsFactors = FALSE)
+expr <- read.delim("5Only_4slidesOnly_ROIbyGene_CORRECTED_AnnotAdded.txt", header = FALSE, stringsAsFactors = FALSE)
 
 
 # Step 2: Assign the first three rows as metadata
