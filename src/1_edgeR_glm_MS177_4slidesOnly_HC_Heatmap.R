@@ -61,7 +61,7 @@ row.names(annotation_col) <- colnames(m)
 # Generate the heatmap
 #### Bright Colors 
 pheatmap(
-  t(scale(t(log(m + 10)))),
+  t(scale(t(log(m + 1)))),
   scale = "row", 
   show_rownames = FALSE,
   show_colnames = FALSE,
