@@ -61,15 +61,16 @@ row.names(annotation_col) <- colnames(m)
 # Generate the heatmap
 #### Bright Colors 
 pheatmap(
-  t(scale(t(log(m + 1)))),
+  t(scale(t(log(m + 10)))),
   scale = "row", 
   show_rownames = FALSE,
   show_colnames = FALSE,
   border_color = NA,
-  column_split = g,
-  clustering_method = "average",
-  clustering_distance_rows = "correlation",
-  clustering_distance_cols = "correlation",
+#  column_split = g,
+column_split = 3,
+  clustering_method = "ward.D2",
+  clustering_distance_rows = "euclidean",
+  clustering_distance_cols = "euclidean",
   color = colorRampPalette(c("blue", "white", "red"))(100),  # Bright colors
   annotation_col = annotation_col,
   use_raster = FALSE
