@@ -143,7 +143,15 @@ pheatmap(group_correlations_log,
 
  
  ########### PCA Plot ###########
+ # Define color mapping
  
+ group_colors <- c(
+  "NAWM" = "#1B9E77", 
+  "WM_line_Lesion_1" = "#377EB8", 
+  "WM_line_Lesion_2" = "#E41A1C",
+  "WML_Lesion_1" = "#984EA3", 
+  "WML_Lesion_2" = "#FF7F00"
+)
  # Perform PCA on normalized expression values (CPM for each sample)
 #y <- calcNormFactors(y)  # Ensure normalization factors are applied
 cpm_data <- cpm(y, log = TRUE)  # Use log-transformed CPM values for PCA
@@ -166,7 +174,7 @@ ggplot(pca_data, aes(x = PC1, y = PC2, color = Group, label = Sample)) +
 #  geom_text(vjust = 1.5, size = 3) +  # Optionally label points with sample names
   labs(title = "PCA of Individual Samples", x = "PC1", y = "PC2") +
   theme_minimal() +
-  scale_color_brewer(palette = "Set1")
+  scale_color_manual(values = group_colors)
 
 ###############################
 #### PCA plot only with NAWM, WM_line_Lesion1 and WM_line_Lesion2
@@ -200,34 +208,7 @@ ggplot(pca_data_selected, aes(x = PC1, y = PC2, color = Group, label = Sample)) 
 #  geom_text(vjust = 1.5, size = 3) +  # Optionally label points with sample names
   labs(title = "PCA of Selected Groups (NAWM, WM_line_Lesion_1, WM_line_Lesion_2)", x = "PC1", y = "PC2") +
   theme_minimal() +
-  scale_color_brewer(palette = "Set1")
-
-
-
-#### modify colors #####
-# Load necessary library
-library(ggplot2)
-
-# Define color mapping
-#group_colors <- c("NAWM" = "green", "WM_line_Lesion_1" = "blue", "WM_line_Lesion_2" = "red")
-group_colors <- c(
-  "NAWM" = "#1B9E77", 
-  "WM_line_Lesion_1" = "#377EB8", 
-  "WM_line_Lesion_2" = "#E41A1C",
-  "WML_Lesion_1" = "#984EA3", 
-  "WML_Lesion_2" = "#FF7F00"
-)
-
-# Plot PCA using ggplot2 with manually assigned colors
-ggplot(pca_data_selected, aes(x = PC1, y = PC2, color = Group, label = Sample)) +
-  geom_point(size = 4) +
-#  stat_ellipse(type = "t", linetype = "dashed", size = 1) +  # Confidence ellipses
-#  geom_text(vjust = 1.5, size = 3) +  # Optionally label points with sample names
-  labs(title = "PCA of Selected Groups (NAWM, WM_line_Lesion_1, WM_line_Lesion_2)", x = "PC1", y = "PC2") +
-  theme_minimal() +
   scale_color_manual(values = group_colors)
-
-
 
 
 ###############################
@@ -262,40 +243,7 @@ ggplot(pca_data_selected, aes(x = PC1, y = PC2, color = Group, label = Sample)) 
 #  geom_text(vjust = 1.5, size = 3) +  # Optionally label points with sample names
   labs(title = "PCA of Selected Groups (NAWM, WML_Lesion1, WML_Lesion2)", x = "PC1", y = "PC2") +
   theme_minimal() +
-  scale_color_brewer(palette = "Set1")
-
-
-
-#### modify colors #####
-# Load necessary library
-library(ggplot2)
-
-pca_data_selected <- data.frame(
-  PC1 = pca_result_selected$x[, 1],
-  PC2 = pca_result_selected$x[, 2],
-  Sample = colnames(cpm_data_selected),
-  Group = g[selected_samples]  # Corresponding group labels
-)
-
-# Define color mapping
-group_colors <- c(
-  "NAWM" = "#1B9E77", 
-  "WM_line_Lesion_1" = "#377EB8", 
-  "WM_line_Lesion_2" = "#E41A1C",
-  "WML_Lesion_1" = "#984EA3", 
-  "WML_Lesion_2" = "#FF7F00"
-)
-
-# Plot PCA using ggplot2 with manually assigned colors
-ggplot(pca_data_selected, aes(x = PC1, y = PC2, color = Group, label = Sample)) +
-  geom_point(size = 4) +
-#  stat_ellipse(type = "t", linetype = "dashed", size = 1) +  # Confidence ellipses
-#  geom_text(vjust = 1.5, size = 3) +  # Optionally label points with sample names
-  labs(title = "PCA of Selected Groups (NAWM, WML_Lesion_1, WML_Lesion_2)", x = "PC1", y = "PC2") +
-  theme_minimal() +
   scale_color_manual(values = group_colors)
-
-
 
  
 ####################################################
