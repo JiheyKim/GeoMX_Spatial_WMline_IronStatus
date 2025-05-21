@@ -100,7 +100,7 @@ expr_data_subset[is.nan(expr_data_subset)] <- 0
 expr_data_subset[is.infinite(expr_data_subset)] <- 0
 
 # Generate the heatmap
-output_file <- "WMline_IronPos_vs_WMline_IronNeg_FDR005_wGeneName_CORRECTED.jpg"
+output_file <- "Heatmap_WMline_IronPos_vs_WMline_IronNeg_FDR005_wGeneName_CORRECTED.jpg"
 
 # Create a JPG file to save the heatmap
 jpeg(output_file, width = 800, height = 600)  # Adjust width and height as needed
