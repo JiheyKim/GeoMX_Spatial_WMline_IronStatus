@@ -336,6 +336,44 @@ pheatmap(heatmap_data_scaled,
          show_colnames = TRUE,
          color = colorRampPalette(c("blue", "white", "red"))(100))
 
+
+
+
+annotation_colors <- list(
+  Group = c(
+    NAWM = "#1b7837",             # Dark green
+    WM_line_Lesion_1 = "#2166ac", # Dark blue
+    WM_line_Lesion_2 = "#b2182b"  # Dark red
+  )
+)
+
+pheatmap(
+  heatmap_data_scaled,
+  cluster_rows = FALSE,
+  cluster_cols = FALSE,
+  annotation_row = gene_annotation,
+  annotation_col = column_annotation,
+  annotation_colors = annotation_colors,  # <--- Custom color mapping
+  gaps_row = c(
+    nrow(heatmap_data_common_scaled),
+    nrow(heatmap_data_common_scaled) + nrow(heatmap_data_nawm_wm1_scaled)
+  ),
+  gaps_col = c(
+    sum(g[selected_samples][ordered_samples] == "NAWM"),
+    sum(g[selected_samples][ordered_samples] %in% c("NAWM", "WM_line_Lesion_1"))
+  ),
+  scale = "none",
+  show_rownames = FALSE,
+  show_colnames = TRUE,
+  color = colorRampPalette(c("blue", "white", "red"))(100)
+)
+
+
+
+
+
+
+
 ################ End of Heatmap of Categori clsutering ####################
 
 # Extract FDR and logFC for each gene category
