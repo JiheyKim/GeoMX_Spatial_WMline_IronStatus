@@ -1,10 +1,70 @@
 # Spatial Transcriptomics of Chronic-Active Lesions in Multiple Sclerosis
 
-This project investigates the molecular mechanisms underlying chronic active white matter lesions in multiple sclerosis (MS), with a focus on the role of iron-positive and iron-negative microglia/macrophages. MS is a chronic demyelinating disease of the central nervous system characterized by a transition from a relapsing-remitting phase to a progressive stage, where current therapies are largely ineffective.
+This project investigates the molecular mechanisms underlying chronic active white matter lesions in multiple sclerosis (MS), with a particular focus on the role of iron-positive and iron-negative microglia/macrophages. MS is a chronic demyelinating disease of the central nervous system, characterized by a transition from a relapsing-remitting phase to a progressive stage—where existing therapies are often ineffective.
 
-Using spatial transcriptomics on postmortem MS brain tissue, we analyzed transcript profiles from iron-positive and iron-negative lesion rims, lesion cores, and surrounding normal white matter. Our approach revealed distinct transcriptional signatures associated with immune activation, IL-12 signaling, and cellular stress responses, depending on both the iron status and lesion region.
+## Overview
 
-This repository contains data and analysis code supporting the reproducibility and spatial resolution of transcriptomic differences in MS lesions, aiming to provide insights into the localized inflammatory environments that drive lesion expansion and disease progression.
+Using NanoString GeoMx Digital Spatial Profiling (DSP), we performed spatial transcriptomic analysis on postmortem MS brain tissue. Transcript profiles were obtained from:
 
-[HC_Heatmap_MS177_4slides_SplitByChunck_CORRECTED.pdf](https://github.com/user-attachments/files/20373709/HC_Heatmap_MS177_4slides_SplitByChunck_CORRECTED.pdf)
-Heatmap shows hierarchical clustering of microglia transcript profiles from the same tissue run on four separate occasions. 
+- Iron-positive lesion rims  
+- Iron-negative lesion rims  
+- Lesion cores  
+- Surrounding normal-appearing white matter (NAWM)
+
+Our analysis uncovered region- and iron-status-specific transcriptional signatures linked to:
+
+- Immune activation
+- IL-12 signaling pathways
+- Oxidative and cellular stress responses
+
+This repository provides the data processing scripts, analysis code, and documentation to ensure reproducibility and transparency. The ultimate goal is to better understand the localized inflammatory environments driving lesion expansion and disease progression in MS.
+
+---
+
+## Repository Contents
+
+- `data/` – Raw and processed expression count tables
+- `scripts/` – All R scripts for preprocessing, normalization, QC, clustering, and visualization
+- `figures/` – Output plots including UMAP, PCA, heatmaps, and hierarchical clustering
+- `results/` – Differential expression results and summary tables
+- `README.txt` – Project overview and setup instructions (this file)
+
+---
+
+## Requirements
+
+### R Version
+
+- **Raw data reading & QC**: R 4.4
+- **Analysis & modeling**: R 4.3
+
+### Required R Packages
+
+#### For R 4.4 (QC and preprocessing)
+
+```r
+NanoStringNCTools
+GeomxTools
+GeoMxWorkflows
+knitr
+dplyr
+ggforce
+ggplot2
+scales
+ggfortify
+reshape2
+cowplot
+pheatmap
+
+#### For R 4.3 (statistical analysis and modeling)
+
+```r
+edgeR
+limma
+dplyr
+magrittr
+pheatmap
+ComplexHeatmap
+ggplot2
+tibble
+randomForest
