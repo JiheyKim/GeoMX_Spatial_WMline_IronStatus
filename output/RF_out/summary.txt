@@ -1,0 +1,2 @@
+Out of 11 test WM lines regions,
+10.5 Iron+ and 2.5 Iron- regions are predicted. 
