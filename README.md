@@ -36,35 +36,32 @@ This repository provides the data processing scripts, analysis code, and documen
 
 ### R Version
 
-- **Raw data reading & QC**: R 4.4
+- **Raw data reading & QC**: R 4.4  
 - **Analysis & modeling**: R 4.3
 
 ### Required R Packages
 
-### Required R Packages
-
 **For R 4.4 (QC and preprocessing)**  
-NanoStringNCTools  
-GeomxTools  
-GeoMxWorkflows  
-knitr  
-dplyr  
-ggforce  
-ggplot2  
-scales  
-ggfortify  
-reshape2  
-cowplot  
-pheatmap  
+- `NanoStringNCTools`  
+- `GeomxTools`  
+- `GeoMxWorkflows`  
+- `knitr`  
+- `dplyr`  
+- `ggforce`  
+- `ggplot2`  
+- `scales`  
+- `ggfortify`  
+- `reshape2`  
+- `cowplot`  
+- `pheatmap`  
 
 **For R 4.3 (Statistical analysis and modeling)**  
-edgeR  
-limma  
-dplyr  
-magrittr  
-pheatmap  
-ComplexHeatmap  
-ggplot2  
-tibble  
-randomForest  
-
+- `edgeR`  
+- `limma`  
+- `dplyr`  
+- `magrittr`  
+- `pheatmap`  
+- `ComplexHeatmap`  
+- `ggplot2`  
+- `tibble`  
+- `randomForest`  
