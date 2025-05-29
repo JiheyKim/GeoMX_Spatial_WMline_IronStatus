@@ -57,9 +57,7 @@ reshape2
 cowplot
 pheatmap
 
-#### For R 4.3 (statistical analysis and modeling)
 
-```r
 edgeR
 limma
 dplyr
@@ -69,3 +67,4 @@ ComplexHeatmap
 ggplot2
 tibble
 randomForest
+
