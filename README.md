@@ -23,10 +23,11 @@ This repository provides the data processing scripts, analysis code, and documen
 
 ## Repository Contents
 
+- `Figures/` – Output plots including PCA, heatmaps, and hierarchical clustering and volcano plots
 - `data/` – Raw and processed expression count tables
-- `scripts/` – All R scripts for preprocessing, normalization, QC, clustering, and visualization
-- `figures/` – Output plots including UMAP, PCA, heatmaps, and hierarchical clustering
-- `results/` – Differential expression results and summary tables
+- `output/` – Differential expression results and Iron status prediction results
+- `rawdata/` – Sample annotation files and pkc
+- `src/` – All R scripts for preprocessing, normalization, QC, clustering, comparison and visualization
 - `README.txt` – Project overview and setup instructions (this file)
 
 ---
