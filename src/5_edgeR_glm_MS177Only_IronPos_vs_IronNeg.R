@@ -65,8 +65,8 @@ comparisons <- list(
 # Perform all pairwise comparisons
 results <- lapply(comparisons, get_significant_genes)
 
-# Contrast for gWML_Lesion_1 vs. gWML_Lesion_2
-contrast <- makeContrasts(WML_Lesion_1 - WML_Lesion_2, levels = design)
+# Contrast for gWM_line_Lesion_1 vs. gWM_line_Lesion_2
+contrast <- makeContrasts(WM_line_Lesion_1 - WM_line_Lesion_2, levels = design)
 qlf <- glmQLFTest(fit, contrast = contrast)
 
 # Extract significant genes
@@ -82,9 +82,9 @@ significant_gene_names <- row.names(significant_genes)
 significant_expr_data <- m[significant_gene_names, ]
 
 # Subset the data to include only samples from the two groups of interest
-group_samples <- which(g %in% c("WML_Lesion_1", "WML_Lesion_2"))
+group_samples <- which(g %in% c("WM_line_Lesion_1", "WM_line_Lesion_2"))
 
-# Ensure that group_samples are ordered so WML_Lesion_1 comes first
+# Ensure that group_samples are ordered so WM_line_Lesion_1 comes first
 group_samples <- group_samples[order(g[group_samples], decreasing = FALSE)]
 
 # Subset the expression data based on the reordered group samples
@@ -100,7 +100,7 @@ expr_data_subset[is.nan(expr_data_subset)] <- 0
 expr_data_subset[is.infinite(expr_data_subset)] <- 0
 
 # Generate the heatmap
-output_file <- "WML_IronPos_vs_WML_IronNeg_FDR005_wGeneName_CORRECTED.jpg"
+output_file <- "WMline_IronPos_vs_WMline_IronNeg_FDR005_wGeneName_CORRECTED.jpg"
 
 # Create a JPG file to save the heatmap
 jpeg(output_file, width = 800, height = 600)  # Adjust width and height as needed
@@ -108,7 +108,7 @@ jpeg(output_file, width = 800, height = 600)  # Adjust width and height as neede
 # Generate the heatmap with split by groups
 Heatmap(t(scale(t(log(expr_data_subset + 1)))), 
         column_split = g[group_samples],  # Split by group
-        #column_split = factor(g[group_samples], levels = c("WML_Lesion_1", "WML_Lesion_2")),
+        #column_split = factor(g[group_samples], levels = c("WM_line_Lesion_1", "WM_line_Lesion_2")),
 
         show_row_names = TRUE, 
         show_column_names = TRUE,
@@ -122,6 +122,6 @@ significant_genes_out <- significant_genes %>%
   select(Gene, everything())
 
 write.csv(significant_genes_out, 
-          file = "DEGs_WML_IronPos_vs_IronNeg_FDR005.csv", 
+          file = "DEGs_WMline_IronPos_vs_IronNeg_FDR005.csv", 
           row.names = FALSE)
 
