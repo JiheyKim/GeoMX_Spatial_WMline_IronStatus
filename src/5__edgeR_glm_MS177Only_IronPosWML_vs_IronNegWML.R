@@ -66,7 +66,7 @@ comparisons <- list(
 results <- lapply(comparisons, get_significant_genes)
 
 # Contrast for gWML_Lesion_1 vs. gWML_Lesion_2
-contrast <- makeContrasts(WML_Lesion_1 - WMLLesion_2, levels = design)
+contrast <- makeContrasts(WML_Lesion_1 - WML_Lesion_2, levels = design)
 qlf <- glmQLFTest(fit, contrast = contrast)
 
 # Extract significant genes
